@@ -7,13 +7,13 @@ Pre-built Docker image for [OpenClaw](https://github.com/openclaw/openclaw) — 
 ### Linux / macOS
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.sh)
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-irm https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.ps1 | iex
 ```
 
 > **Note for Windows users:** Make sure Docker Desktop is installed and running. You can also use WSL2 with the Linux installation command.
@@ -35,32 +35,32 @@ This will:
 
 ```bash
 # Just pull the image (no setup)
-bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.sh) --pull-only
+bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.sh) --pull-only
 
 # Skip onboarding (if already configured)
-bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.sh) --skip-onboard
+bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.sh) --skip-onboard
 
 # Don't start gateway after setup
-bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.sh) --no-start
+bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.sh) --no-start
 
 # Custom install directory
-bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.sh) --install-dir /opt/openclaw
+bash <(curl -fsSL https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.sh) --install-dir /opt/openclaw
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
 # Just pull the image (no setup)
-irm https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.ps1 | iex -PullOnly
+irm https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.ps1 | iex -PullOnly
 
 # Skip onboarding (if already configured)
-irm https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.ps1 | iex -SkipOnboard
+irm https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.ps1 | iex -SkipOnboard
 
 # Don't start gateway after setup
-irm https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.ps1 | iex -NoStart
+irm https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.ps1 | iex -NoStart
 
 # Custom install directory
-$env:TEMP_INSTALL_SCRIPT = irm https://raw.githubusercontent.com/phioranex/clawbot-docker/main/install.ps1; Invoke-Expression $env:TEMP_INSTALL_SCRIPT -InstallDir "C:\openclaw"
+$env:TEMP_INSTALL_SCRIPT = irm https://raw.githubusercontent.com/phioranex/openclaw-docker/main/install.ps1; Invoke-Expression $env:TEMP_INSTALL_SCRIPT -InstallDir "C:\openclaw"
 ```
 
 ## Manual Install
@@ -69,13 +69,13 @@ $env:TEMP_INSTALL_SCRIPT = irm https://raw.githubusercontent.com/phioranex/clawb
 
 ```bash
 # Pull the image
-docker pull ghcr.io/phioranex/clawbot-docker:latest
+docker pull ghcr.io/phioranex/openclaw-docker:latest
 
 # Run onboarding (first time setup)
 docker run -it --rm \
   -v ~/.openclaw:/home/node/.openclaw \
   -v ~/.openclaw/workspace:/home/node/.openclaw/workspace \
-  ghcr.io/phioranex/clawbot-docker:latest onboard
+  ghcr.io/phioranex/openclaw-docker:latest onboard
 
 # Start the gateway
 docker run -d \
@@ -84,15 +84,15 @@ docker run -d \
   -v ~/.openclaw:/home/node/.openclaw \
   -v ~/.openclaw/workspace:/home/node/.openclaw/workspace \
   -p 18789:18789 \
-  ghcr.io/phioranex/clawbot-docker:latest gateway start --foreground
+  ghcr.io/phioranex/openclaw-docker:latest gateway start --foreground
 ```
 
 ### Using Docker Compose
 
 ```bash
 # Clone this repo
-git clone https://github.com/phioranex/clawbot-docker.git
-cd clawbot-docker
+git clone https://github.com/phioranex/openclaw-docker.git
+cd openclaw-docker
 
 # Run onboarding
 docker compose run --rm openclaw-cli onboard
