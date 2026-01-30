@@ -13,7 +13,7 @@ services:
     environment:
       - NODE_ENV=production
       - OPENCLAW_SKIP_SERVICE_CHECK=true
-    command: ["node", "/app/dist/index.js", "gateway", "--port", "18789", "--bind", "lan"]
+    command: ["gateway"]
   
   socat-proxy:
     image: alpine/socat
