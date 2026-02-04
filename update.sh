@@ -180,7 +180,7 @@ echo -e "${GREEN}✓${NC} Socat proxy started"
 # Get local IP address(es) for display
 get_local_ips() {
     # Try hostname -I first (works on most Linux distros)
-    local ips=$(hostname -I 2>/dev/null | tr ' ' '\n' | grep -v '^$')
+    local ips=$(hostname -I 2>/dev/null | tr ' ' '\n')
     if [ -n "$ips" ]; then
         echo "$ips"
         return
@@ -205,8 +205,8 @@ echo -e "${GREEN}${BOLD}✓ Update complete!${NC}"
 echo ""
 echo -e "${CYAN}Gateway is running at:${NC}"
 if [ -n "$LOCAL_IPS" ]; then
-    for ip in $LOCAL_IPS; do
-        echo -e "  http://$ip:18789"
+    echo "$LOCAL_IPS" | while read -r ip; do
+        [ -n "$ip" ] && echo -e "  http://$ip:18789"
     done
 else
     echo -e "  http://localhost:18789"
