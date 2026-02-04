@@ -159,6 +159,7 @@ docker run -d \
     -p 18790:18790 \
     -e NODE_ENV=production \
     -e OPENCLAW_SKIP_SERVICE_CHECK=true \
+    -e OPENCLAW_HOST=0.0.0.0 \
     "$IMAGE_TAG" \
     gateway
 

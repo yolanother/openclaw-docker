@@ -16,6 +16,7 @@ services:
     environment:
       - NODE_ENV=production
       - OPENCLAW_SKIP_SERVICE_CHECK=true
+      - OPENCLAW_HOST=0.0.0.0
     command: ["gateway"]
   
   socat-proxy:
