@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # OpenClaw Docker Update Script
 # Rebuild and restart OpenClaw Docker container
@@ -84,6 +84,20 @@ echo -e "${CYAN}Workspace:${NC} $OPENCLAW_WORKSPACE_VOLUME"
 echo -e "${CYAN}Run Init:${NC} $RUN_INIT"
 echo ""
 
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    echo -e "${RED}✗${NC} Error: Docker is not installed or not in PATH"
+    echo "Please install Docker first: https://docs.docker.com/get-docker/"
+    exit 1
+fi
+
+# Check if Docker daemon is running
+if ! docker info &> /dev/null; then
+    echo -e "${RED}✗${NC} Error: Docker daemon is not running"
+    echo "Please start Docker and try again"
+    exit 1
+fi
+
 # Step 1: Stop and remove existing container
 echo -e "${YELLOW}→${NC} Stopping and removing existing container..."
 if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
@@ -103,10 +117,23 @@ fi
 # Step 2: Build new image
 echo ""
 echo -e "${YELLOW}→${NC} Building Docker image from branch: ${BOLD}$BRANCH${NC}"
-docker build \
+
+if ! docker build \
     --build-arg OPENCLAW_VERSION="$BRANCH" \
     -t "$IMAGE_TAG" \
-    .
+    . ; then
+    echo ""
+    echo -e "${RED}✗${NC} Error: Docker build failed"
+    echo ""
+    echo "Possible causes:"
+    echo "  - The branch '$BRANCH' does not exist in the OpenClaw repository"
+    echo "  - Network connectivity issues preventing git clone"
+    echo "  - Build dependencies failed to install"
+    echo ""
+    echo "To verify the branch exists, visit:"
+    echo "  https://github.com/openclaw/openclaw/tree/$BRANCH"
+    exit 1
+fi
 
 echo -e "${GREEN}✓${NC} Docker image built successfully"
 
