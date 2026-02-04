@@ -1,3 +1,6 @@
 # Moltbot Docker
 
-Build artifacts and temporary files
+# Build artifacts and temporary files
+
+# Local environment configuration
+.env.local
