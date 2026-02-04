@@ -103,6 +103,50 @@ docker compose run --rm openclaw-cli onboard
 docker compose up -d openclaw-gateway
 ```
 
+## Development & Updates
+
+### Update Script
+
+For local development or testing specific branches/PRs, use the included `update.sh` script:
+
+```bash
+# Update from main branch (default)
+./update.sh
+
+# Test a specific branch or PR
+./update.sh --branch feature-name
+
+# Rebuild and run onboarding
+./update.sh --init
+
+# Combine options
+./update.sh --branch pr-123 --init
+```
+
+#### Custom Volume Configuration
+
+Create a `.env.local` file to customize volume paths:
+
+```bash
+# Copy the example file
+cp .env.local.example .env.local
+
+# Edit with your preferred paths
+nano .env.local
+```
+
+Example `.env.local`:
+```bash
+OPENCLAW_VOLUME="/opt/openclaw/config"
+OPENCLAW_WORKSPACE_VOLUME="/opt/openclaw/workspace"
+```
+
+The update script will:
+1. Stop and remove existing containers
+2. Rebuild the Docker image from the specified branch
+3. Optionally run the onboarding wizard (with `--init`)
+4. Start the gateway and proxy containers
+
 ## Configuration
 
 During onboarding, you'll configure:
