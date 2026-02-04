@@ -177,11 +177,21 @@ docker run -d \
 
 echo -e "${GREEN}✓${NC} Socat proxy started"
 
+# Get local IP address(es)
+LOCAL_IPS=$(hostname -I 2>/dev/null | tr ' ' '\n' | grep -v '^$' || ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '^127\.' || echo "")
+
 # Final status
 echo ""
 echo -e "${GREEN}${BOLD}✓ Update complete!${NC}"
 echo ""
-echo -e "${CYAN}Gateway is running at:${NC} http://localhost:18789"
+echo -e "${CYAN}Gateway is running at:${NC}"
+if [ -n "$LOCAL_IPS" ]; then
+    for ip in $LOCAL_IPS; do
+        echo -e "  http://$ip:18789"
+    done
+else
+    echo -e "  http://localhost:18789"
+fi
 echo ""
 echo -e "${CYAN}Useful commands:${NC}"
 echo -e "  View logs:    ${BOLD}docker logs -f $CONTAINER_NAME${NC}"
