@@ -37,7 +37,7 @@ fi
 
 # Use environment variables with defaults
 OPENCLAW_VOLUME="${OPENCLAW_VOLUME:-$HOME/.openclaw}"
-OPENCLAW_WORKSPACE_VOLUME="${OPENCLAW_WORKSPACE_VOLUME:-$HOME/.openclaw/workspace}"
+OPENCLAW_WORKSPACE_VOLUME="${OPENCLAW_WORKSPACE_VOLUME:-${OPENCLAW_VOLUME}/workspace}"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -101,17 +101,15 @@ fi
 # Step 1: Stop and remove existing container
 echo -e "${YELLOW}→${NC} Stopping and removing existing container..."
 if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
-    docker stop "$CONTAINER_NAME" 2>/dev/null || true
-    docker rm "$CONTAINER_NAME" 2>/dev/null || true
+    docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
     echo -e "${GREEN}✓${NC} Container removed"
 else
     echo -e "${CYAN}ℹ${NC} No existing container found"
 fi
 
-# Also stop socat proxy if running
+# Also stop and remove socat proxy if running
 if docker ps -a --format '{{.Names}}' | grep -q "^openclaw-socat$"; then
-    docker stop openclaw-socat 2>/dev/null || true
-    docker rm openclaw-socat 2>/dev/null || true
+    docker rm -f openclaw-socat 2>/dev/null || true
 fi
 
 # Step 2: Build new image
