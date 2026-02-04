@@ -177,8 +177,27 @@ docker run -d \
 
 echo -e "${GREEN}✓${NC} Socat proxy started"
 
-# Get local IP address(es)
-LOCAL_IPS=$(hostname -I 2>/dev/null | tr ' ' '\n' | grep -v '^$' || ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '^127\.' || echo "")
+# Get local IP address(es) for display
+get_local_ips() {
+    # Try hostname -I first (works on most Linux distros)
+    local ips=$(hostname -I 2>/dev/null | tr ' ' '\n' | grep -v '^$')
+    if [ -n "$ips" ]; then
+        echo "$ips"
+        return
+    fi
+    
+    # Fallback to ip command (if hostname -I not available)
+    ips=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '^127\.')
+    if [ -n "$ips" ]; then
+        echo "$ips"
+        return
+    fi
+    
+    # No IPs found, return empty
+    echo ""
+}
+
+LOCAL_IPS=$(get_local_ips)
 
 # Final status
 echo ""
