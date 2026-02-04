@@ -100,16 +100,16 @@ fi
 
 # Step 1: Stop and remove existing container
 echo -e "${YELLOW}→${NC} Stopping and removing existing container..."
-if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
-    docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
+if [ -n "$(docker ps -aq -f name=^${CONTAINER_NAME}$)" ]; then
+    docker rm -f "$CONTAINER_NAME"
     echo -e "${GREEN}✓${NC} Container removed"
 else
     echo -e "${CYAN}ℹ${NC} No existing container found"
 fi
 
 # Also stop and remove socat proxy if running
-if docker ps -a --format '{{.Names}}' | grep -q "^openclaw-socat$"; then
-    docker rm -f openclaw-socat 2>/dev/null || true
+if [ -n "$(docker ps -aq -f name=^openclaw-socat$)" ]; then
+    docker rm -f openclaw-socat
 fi
 
 # Step 2: Build new image
