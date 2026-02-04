@@ -180,8 +180,9 @@ When restricted to localhost, only applications running on the same machine can 
 
 | Path | Purpose |
 |------|---------|
-| `/home/node/.openclaw` | Config and session data |
-| `/home/node/.openclaw/workspace` | Agent workspace |
+| `/home/node/.openclaw` | Config, session data, and workspace (includes workspace subdirectory) |
+
+> **Note:** The workspace is automatically accessible at `/home/node/.openclaw/workspace` within the main volume mount. A separate workspace volume mount is not needed and may cause permission issues.
 
 ## Ports
 

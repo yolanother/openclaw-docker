@@ -141,7 +141,6 @@ if [ "$RUN_INIT" = true ]; then
     echo -e "${YELLOW}→${NC} Running onboarding wizard..."
     docker run -it --rm \
         -v "$OPENCLAW_VOLUME:/home/node/.openclaw" \
-        -v "$OPENCLAW_WORKSPACE_VOLUME:/home/node/.openclaw/workspace" \
         "$IMAGE_TAG" \
         onboard
     echo -e "${GREEN}✓${NC} Onboarding complete"
@@ -154,7 +153,6 @@ docker run -d \
     --name "$CONTAINER_NAME" \
     --restart unless-stopped \
     -v "$OPENCLAW_VOLUME:/home/node/.openclaw" \
-    -v "$OPENCLAW_WORKSPACE_VOLUME:/home/node/.openclaw/workspace" \
     -p 18789:18789 \
     -p 18790:18790 \
     -e NODE_ENV=production \

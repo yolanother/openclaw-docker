@@ -9,7 +9,6 @@ services:
     # user: "1000:1000"
     volumes:
       - ~/.openclaw:/home/node/.openclaw
-      - ~/.openclaw/workspace:/home/node/.openclaw/workspace
     ports:
       - "18789:18789"
       - "18790:18790"
@@ -35,7 +34,6 @@ services:
     # user: "1000:1000"
     volumes:
       - ~/.openclaw:/home/node/.openclaw
-      - ~/.openclaw/workspace:/home/node/.openclaw/workspace
     environment:
       - NODE_ENV=production
     entrypoint: ["node", "/app/dist/index.js"]
