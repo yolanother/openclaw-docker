@@ -51,6 +51,6 @@ WORKDIR /home/node
 ENV NODE_ENV=production
 ENV PATH="/app/node_modules/.bin:${PATH}"
 
-# Default command  - use help command with --no-color to avoid truncation issues
+# Default command - use help command with --no-color to avoid truncation issues
 ENTRYPOINT ["node", "/app/dist/index.js"]
 CMD ["--no-color", "help"]
