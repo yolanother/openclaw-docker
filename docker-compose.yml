@@ -9,13 +9,13 @@ services:
     # user: "1000:1000"
     volumes:
       - ~/.openclaw:/home/node/.openclaw
-      - ~/.openclaw/workspace:/home/node/.openclaw/workspace
     ports:
       - "18789:18789"
       - "18790:18790"
     environment:
       - NODE_ENV=production
       - OPENCLAW_SKIP_SERVICE_CHECK=true
+      - OPENCLAW_HOST=0.0.0.0
     command: ["gateway"]
   
   socat-proxy:
@@ -34,7 +34,6 @@ services:
     # user: "1000:1000"
     volumes:
       - ~/.openclaw:/home/node/.openclaw
-      - ~/.openclaw/workspace:/home/node/.openclaw/workspace
     environment:
       - NODE_ENV=production
     entrypoint: ["node", "/app/dist/index.js"]

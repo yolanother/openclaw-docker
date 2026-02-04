@@ -141,7 +141,6 @@ if [ "$RUN_INIT" = true ]; then
     echo -e "${YELLOW}→${NC} Running onboarding wizard..."
     docker run -it --rm \
         -v "$OPENCLAW_VOLUME:/home/node/.openclaw" \
-        -v "$OPENCLAW_WORKSPACE_VOLUME:/home/node/.openclaw/workspace" \
         "$IMAGE_TAG" \
         onboard
     echo -e "${GREEN}✓${NC} Onboarding complete"
@@ -154,11 +153,11 @@ docker run -d \
     --name "$CONTAINER_NAME" \
     --restart unless-stopped \
     -v "$OPENCLAW_VOLUME:/home/node/.openclaw" \
-    -v "$OPENCLAW_WORKSPACE_VOLUME:/home/node/.openclaw/workspace" \
     -p 18789:18789 \
     -p 18790:18790 \
     -e NODE_ENV=production \
     -e OPENCLAW_SKIP_SERVICE_CHECK=true \
+    -e OPENCLAW_HOST=0.0.0.0 \
     "$IMAGE_TAG" \
     gateway
 
@@ -176,11 +175,41 @@ docker run -d \
 
 echo -e "${GREEN}✓${NC} Socat proxy started"
 
+# Get local IP address(es) for display
+get_local_ips() {
+    # Try hostname -I first (works on most Linux distros)
+    # Filter for IPv4 addresses only
+    local ips=$(hostname -I 2>/dev/null | tr ' ' '\n' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$')
+    if [ -n "$ips" ]; then
+        echo "$ips"
+        return
+    fi
+    
+    # Fallback to ip command (if hostname -I not available)
+    ips=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '^127\.')
+    if [ -n "$ips" ]; then
+        echo "$ips"
+        return
+    fi
+    
+    # No IPs found, return empty
+    echo ""
+}
+
+LOCAL_IPS=$(get_local_ips)
+
 # Final status
 echo ""
 echo -e "${GREEN}${BOLD}✓ Update complete!${NC}"
 echo ""
-echo -e "${CYAN}Gateway is running at:${NC} http://localhost:18789"
+echo -e "${CYAN}Gateway is running at:${NC}"
+if [ -n "$LOCAL_IPS" ]; then
+    while read -r ip; do
+        [ -n "$ip" ] && echo -e "  http://$ip:18789"
+    done < <(echo "$LOCAL_IPS")
+else
+    echo -e "  http://localhost:18789"
+fi
 echo ""
 echo -e "${CYAN}Useful commands:${NC}"
 echo -e "  View logs:    ${BOLD}docker logs -f $CONTAINER_NAME${NC}"

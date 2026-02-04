@@ -156,6 +156,16 @@ During onboarding, you'll configure:
 
 Config is stored in `~/.openclaw/` and persists across container restarts.
 
+### Network Access
+
+By default, the gateway is configured to accept connections from any network interface (`0.0.0.0`), allowing other devices on your network to connect. 
+
+**Security Note:** If you want to restrict access to localhost only (for added security), you can:
+1. Set `OPENCLAW_HOST=127.0.0.1` in your `.env.local` file, or
+2. Add it to the environment section in `docker-compose.yml`
+
+When restricted to localhost, only applications running on the same machine can connect to the gateway.
+
 ## Available Tags
 
 | Tag | Description |
@@ -170,14 +180,18 @@ Config is stored in `~/.openclaw/` and persists across container restarts.
 
 | Path | Purpose |
 |------|---------|
-| `/home/node/.openclaw` | Config and session data |
-| `/home/node/.openclaw/workspace` | Agent workspace |
+| `/home/node/.openclaw` | Config, session data, and workspace (includes workspace subdirectory) |
+
+> **Note:** The workspace is automatically accessible at `/home/node/.openclaw/workspace` within the main volume mount. A separate workspace volume mount is not needed and may cause permission issues.
 
 ## Ports
 
 | Port | Purpose |
 |------|---------|
 | `18789` | Gateway API + Dashboard |
+| `18790` | Socat proxy (alternative access) |
+
+> **Network Access:** The gateway binds to `0.0.0.0` (all network interfaces) by default, allowing connections from other systems on your network. To restrict access to localhost only, set `OPENCLAW_HOST=127.0.0.1` in your environment or `.env.local` file.
 
 ## Links
 
